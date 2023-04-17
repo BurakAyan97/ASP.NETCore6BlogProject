@@ -23,6 +23,7 @@ namespace Blog.Service.Services.Concrete
         }
         public async Task<List<ArticleVM>> GetAllArticlesAsync()
         {
+            //GetRepository metodu ile tek bir metoddan generic şekilde içindeki tüm metodlara ulaşabildik.
             var articles = await unitOfWork.GetRepository<Article>().GetAllAsync();
             var map = mapper.Map<List<ArticleVM>>(articles);
             return map;

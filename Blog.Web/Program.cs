@@ -7,7 +7,9 @@ using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
 builder.Services.LoadDataLayerExtension(builder.Configuration);
+
 builder.Services.LoadServiceLayerExtension();
 
 var app = builder.Build();
@@ -20,6 +22,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();
@@ -35,6 +38,5 @@ app.UseEndpoints(endpoints =>
         );
     endpoints.MapDefaultControllerRoute();
 });
-
 
 app.Run();
