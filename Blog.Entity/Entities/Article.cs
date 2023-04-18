@@ -11,7 +11,7 @@ namespace Blog.Entity.Entities
     {
         public string Title { get; set; }
         public string Content { get; set; }
-        public int ViewCount { get; set; }
+        public int ViewCount { get; set; } = 0;
 
         public Guid CategoryId { get; set; }
         public Category Category { get; set; }

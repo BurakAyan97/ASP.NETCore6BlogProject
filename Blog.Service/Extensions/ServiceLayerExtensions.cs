@@ -22,6 +22,8 @@ namespace Blog.Service.Extensions
             var assembly = Assembly.GetExecutingAssembly();
 
             services.AddScoped<IArticleService, ArticleService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+
             //Automapperı bu katmanda kullanacağımızı söylemek istiyoruz. O yüzden assembly kullanıyoruz ve program.cs e yazmaktan kurtuluyoruz.
             services.AddAutoMapper(assembly);
 
