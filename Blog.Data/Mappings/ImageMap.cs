@@ -16,6 +16,7 @@ namespace Blog.Data.Mappings
                 CreatedBy = "Admin Test",
                 CreatedDate = DateTime.Now,
                 IsDeleted = false
+                
             },
             new Image
             {

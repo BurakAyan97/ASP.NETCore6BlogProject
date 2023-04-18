@@ -60,6 +60,7 @@ namespace Blog.Data.Mappings
                 PhoneNumberConfirmed = true,
                 EmailConfirmed = true,
                 SecurityStamp = Guid.NewGuid().ToString(),
+                ImageId = Guid.Parse("F71F4B9A-AA60-461D-B398-DE31001BF214")
             };
             superadmin.PasswordHash = CreatePasswordHash(superadmin, "123456");
 
@@ -76,6 +77,7 @@ namespace Blog.Data.Mappings
                 PhoneNumberConfirmed = false,
                 EmailConfirmed = false,
                 SecurityStamp = Guid.NewGuid().ToString(),
+                ImageId = Guid.Parse("F71F4B9A-AA60-461D-B398-DE31001BF214")
             };
             admin.PasswordHash = CreatePasswordHash(admin, "123456");
 
