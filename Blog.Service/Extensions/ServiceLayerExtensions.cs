@@ -7,6 +7,7 @@ using Blog.Service.Services.Abstracts;
 using Blog.Service.Services.Concrete;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -27,6 +28,7 @@ namespace Blog.Service.Extensions
 
             services.AddScoped<IArticleService, ArticleService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             //Automapperı bu katmanda kullanacağımızı söylemek istiyoruz. O yüzden assembly kullanıyoruz ve program.cs e yazmaktan kurtuluyoruz.
             services.AddAutoMapper(assembly);
