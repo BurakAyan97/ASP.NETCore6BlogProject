@@ -14,5 +14,6 @@ namespace Blog.Service.Services.Abstracts
         Task<ArticleVM> GetArticleWithCategoryNonDeletedAsync(Guid articleId);
         Task CreateArticleAsync(ArticleAddVM articleAddVM);
         Task UpdateArticleAsync(ArticleUpdateVM articleUpdateVM);
+        Task SafeDeleteArticleAsync(Guid articleId);
     }
 }

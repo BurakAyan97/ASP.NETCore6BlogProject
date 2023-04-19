@@ -26,13 +26,8 @@ namespace Blog.Service.Services.Concrete
         public async Task CreateArticleAsync(ArticleAddVM articleAddVM)
         {
             var userId = Guid.Parse("5988CE36-F81D-459F-B405-8CEC5CCBF841");
-            var article = new Article
-            {
-                Title = articleAddVM.Title,
-                Content = articleAddVM.Content,
-                CategoryId = articleAddVM.CategoryId,
-                UserId = userId
-            };
+            var imageId = Guid.Parse("F71F4B9A-AA60-461D-B398-DE31001BF214");
+            var article = new Article(articleAddVM.Title, articleAddVM.Content, userId, articleAddVM.CategoryId, imageId);
 
             await unitOfWork.GetRepository<Article>().AddAsync(article);
             await unitOfWork.SaveAsync();
@@ -57,10 +52,21 @@ namespace Blog.Service.Services.Concrete
         public async Task UpdateArticleAsync(ArticleUpdateVM articleUpdateVM)
         {
             var article = await unitOfWork.GetRepository<Article>().GetAsync(x => !x.IsDeleted && x.Id == articleUpdateVM.Id, x => x.Category);
-            
+
             article.Title = articleUpdateVM.Title;
             article.Content = articleUpdateVM.Content;
             article.CategoryId = articleUpdateVM.CategoryId;
+
+            await unitOfWork.GetRepository<Article>().UpdateAsync(article);
+            await unitOfWork.SaveAsync();
+        }
+
+        public async Task SafeDeleteArticleAsync(Guid articleId)
+        {
+            var article = await unitOfWork.GetRepository<Article>().GetByGuidAsync(articleId);
+
+            article.IsDeleted = true;
+            article.DeletedDate = DateTime.Now;
 
             await unitOfWork.GetRepository<Article>().UpdateAsync(article);
             await unitOfWork.SaveAsync();

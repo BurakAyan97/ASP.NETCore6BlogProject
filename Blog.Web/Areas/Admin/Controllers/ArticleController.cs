@@ -2,6 +2,8 @@
 using Blog.Entity.Entities;
 using Blog.Entity.ViewModels.Articles;
 using Blog.Service.Services.Abstracts;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Web.Areas.Admin.Controllers
@@ -12,12 +14,14 @@ namespace Blog.Web.Areas.Admin.Controllers
         private readonly IArticleService _articleService;
         private readonly ICategoryService _categoryService;
         private readonly IMapper _mapper;
+        private readonly IValidator<Article> _validator;
 
-        public ArticleController(IArticleService articleService, ICategoryService categoryService, IMapper mapper)
+        public ArticleController(IArticleService articleService, ICategoryService categoryService, IMapper mapper, IValidator<Article> validator)
         {
             _articleService = articleService;
             _categoryService = categoryService;
             _mapper = mapper;
+            _validator = validator;
         }
 
         public async Task<IActionResult> Index()
@@ -34,9 +38,19 @@ namespace Blog.Web.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(ArticleAddVM articleAddVM)
         {
-            await _articleService.CreateArticleAsync(articleAddVM);
-            RedirectToAction("Index", "Article", new { Area = "Admin" });
+            var map = _mapper.Map<Article>(articleAddVM);
+            var result = await _validator.ValidateAsync(map);
 
+            if (result.IsValid)
+            {
+                await _articleService.CreateArticleAsync(articleAddVM);
+                return RedirectToAction("Index", "Article", new { Area = "Admin" });
+            }
+            else
+            {
+                result.AddToModelState(this.ModelState);
+
+            }
             var categories = await _categoryService.GetAllCategoriesNonDeleted();
             return View(new ArticleAddVM { Categories = categories });
         }
@@ -56,16 +70,29 @@ namespace Blog.Web.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(ArticleUpdateVM articleUpdateVM)
         {
+            var map = _mapper.Map<Article>(articleUpdateVM);
+            var result = await _validator.ValidateAsync(map);
 
+            if (result.IsValid)
+            {
+                await _articleService.UpdateArticleAsync(articleUpdateVM);
 
+            }
+            else
+            {
+                result.AddToModelState(this.ModelState);
+            }
 
-            //var article = await _articleService.GetArticleWithCategoryNonDeletedAsync(articleId);
-            //var categories = await _categoryService.GetAllCategoriesNonDeleted();
+            var categories = await _categoryService.GetAllCategoriesNonDeleted();
+            articleUpdateVM.Categories = categories;
+            return View(articleUpdateVM);
+        }
 
-            //var articleUpdateVM = _mapper.Map<ArticleAddVM>(article);
-            //articleUpdateVM.Categories = categories;
+        public async Task<IActionResult> Delete(Guid articleId)
+        {
+            await _articleService.SafeDeleteArticleAsync(articleId);
 
-            //return View(articleUpdateVM);
+            return RedirectToAction("Index", "Article", new { Area = "Admin" });
         }
     }
 }
