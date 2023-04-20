@@ -3,6 +3,7 @@ using Blog.Data.Repositories.Abstracts;
 using Blog.Data.Repositories.Concretes;
 using Blog.Data.UnitOfWorks;
 using Blog.Service.FluentValidations;
+using Blog.Service.Helpers.Images;
 using Blog.Service.Services.Abstracts;
 using Blog.Service.Services.Concrete;
 using FluentValidation;
@@ -28,6 +29,7 @@ namespace Blog.Service.Extensions
 
             services.AddScoped<IArticleService, ArticleService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IImageHelper, ImageHelper>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             //Automapperı bu katmanda kullanacağımızı söylemek istiyoruz. O yüzden assembly kullanıyoruz ve program.cs e yazmaktan kurtuluyoruz.

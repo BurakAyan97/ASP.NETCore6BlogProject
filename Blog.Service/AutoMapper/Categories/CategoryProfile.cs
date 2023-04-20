@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Blog.Entity.Entities;
+using Blog.Entity.ViewModels.Categories;
 using Blog.Service.Services.Categories;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,8 @@ namespace Blog.Service.AutoMapper.Categories
         public CategoryProfile()
         {
             CreateMap<CategoryVM, Category>().ReverseMap();
+            CreateMap<CategoryAddVM, Category>().ReverseMap();
+            CreateMap<CategoryUpdateVM, Category>().ReverseMap();
         }
     }
 }

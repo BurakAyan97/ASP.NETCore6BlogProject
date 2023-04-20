@@ -1,4 +1,5 @@
 ﻿using Blog.Service.Services.Categories;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,8 @@ namespace Blog.Entity.ViewModels.Articles
         public string Title { get; set; }
         public string Content{ get; set; }
         public Guid CategoryId { get; set; }
+        public IFormFile Photo { get; set; }
+
         public IList<CategoryVM> Categories { get; set; }
 
     }
