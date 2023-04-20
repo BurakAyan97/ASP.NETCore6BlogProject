@@ -7,6 +7,7 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
+using System.ComponentModel.DataAnnotations;
 
 namespace Blog.Web.Areas.Admin.Controllers
 {
@@ -52,6 +53,26 @@ namespace Blog.Web.Areas.Admin.Controllers
             {
                 result.AddToModelState(this.ModelState);
                 return View();
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddWithAjax([FromBody] CategoryAddVM categoryAddVM)
+        {
+            var map = _mapper.Map<Category>(categoryAddVM);
+            var result = await _validator.ValidateAsync(map);
+
+            if (result.IsValid)
+            {
+                await categoryService.CreateCategoryAsync(categoryAddVM);
+                _toast.AddSuccessToastMessage(Messages.Category.Add(categoryAddVM.Name), new ToastrOptions { Title = "İşlem Başarılı" });
+
+                return Json(Messages.Category.Add(categoryAddVM.Name));
+            }
+            else
+            {
+                _toast.AddErrorToastMessage(result.Errors.First().ErrorMessage, new ToastrOptions { Title = "İşlem Başarısız" });
+                return Json(result.Errors.First().ErrorMessage);
             }
         }
 
