@@ -1,5 +1,7 @@
-﻿using Blog.Service.Services.Abstracts;
+﻿using Blog.Entity.Entities;
+using Blog.Service.Services.Abstracts;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Web.Areas.Admin.Controllers
