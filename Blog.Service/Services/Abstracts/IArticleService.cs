@@ -11,9 +11,11 @@ namespace Blog.Service.Services.Abstracts
     public interface IArticleService
     {
         Task<List<ArticleVM>> GetAllArticlesWithCategoryNonDeletedAsync();
+        Task<List<ArticleVM>> GetAllArticlesWithCategoryDeletedAsync();
         Task<ArticleVM> GetArticleWithCategoryNonDeletedAsync(Guid articleId);
         Task CreateArticleAsync(ArticleAddVM articleAddVM);
         Task<string> UpdateArticleAsync(ArticleUpdateVM articleUpdateVM);
         Task<string> SafeDeleteArticleAsync(Guid articleId);
+        Task<string> UndoDeleteArticleAsync(Guid articleId);
     }
 }
