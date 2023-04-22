@@ -30,6 +30,7 @@ namespace Blog.Service.Extensions
             services.AddScoped<IArticleService, ArticleService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IImageHelper, ImageHelper>();
+            services.AddScoped<IUserService, UserService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             //Automapperı bu katmanda kullanacağımızı söylemek istiyoruz. O yüzden assembly kullanıyoruz ve program.cs e yazmaktan kurtuluyoruz.
