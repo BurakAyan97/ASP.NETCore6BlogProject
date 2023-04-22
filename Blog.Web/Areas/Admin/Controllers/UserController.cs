@@ -21,26 +21,17 @@ namespace Blog.Web.Areas.Admin.Controllers
     [Area("Admin")]
     public class UserController : Controller
     {
-        private readonly UserManager<AppUser> userManager;
-        private readonly RoleManager<AppRole> roleManager;
+
         private readonly IMapper mapper;
         private readonly IValidator<AppUser> validator;
         private readonly IToastNotification toast;
-        private readonly SignInManager<AppUser> signInManager;
-        private readonly IImageHelper imageHelper;
-        private readonly IUnitOfWork unitOfWork;
         private readonly IUserService userService;
 
-        public UserController(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IMapper mapper, IValidator<AppUser> validator, IToastNotification toast, SignInManager<AppUser> signInManager, IImageHelper imageHelper, IUnitOfWork unitOfWork, IUserService userService)
+        public UserController(IMapper mapper, IValidator<AppUser> validator, IToastNotification toast, IUserService userService)
         {
-            this.userManager = userManager;
-            this.roleManager = roleManager;
             this.mapper = mapper;
             this.validator = validator;
             this.toast = toast;
-            this.signInManager = signInManager;
-            this.imageHelper = imageHelper;
-            this.unitOfWork = unitOfWork;
             this.userService = userService;
         }
         public async Task<IActionResult> Index()

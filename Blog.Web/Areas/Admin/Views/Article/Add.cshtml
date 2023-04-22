@@ -1,8 +1,11 @@
 ﻿@model Blog.Entity.ViewModels.Articles.ArticleAddVM
 <div class="container-xxl flex-grow-1 container-p-y">
+
+
     <h4 class="fw-bold py-3 mb-4">
         <span class="text-muted fw-light">Makale Yönetimi /</span> Makale Ekle
     </h4>
+
     <div class="row">
         <div class="col-md-12">
             <div class="card mb-4">
@@ -12,11 +15,14 @@
                     <div class="card-body">
                         <div class="form-group">
                             <label asp-for="CategoryId">Kategori</label>
+
                             <a class="btn text-primary float-end" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
                                 Ekle <i class="bx bx-plus"></i>
                             </a>
+
                             <select id="categoryList" class="form-control" asp-for="CategoryId" asp-items="@(new SelectList(Model.Categories,"Id","Name"))"></select>
                             <span asp-validation-for="CategoryId" class="text-danger"></span>
+
                         </div>
                         <div class="form-group">
                             <label asp-for="Title" id="defaultFormControlInput" class="form-label">Başlık</label>
@@ -33,6 +39,8 @@
                             <input asp-for="Photo" type="file" accept="image/*" class="form-control mb-3" id="defaultFormControlInput" aria-describedby="defaultFormControlHelp">
                             <span asp-validation-for="Photo" class="text-danger"></span>
                         </div>
+
+
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary btn-block">Kaydet</button>
                         </div>
@@ -41,7 +49,10 @@
             </div>
         </div>
     </div>
+
+
 </div>
+
 
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
