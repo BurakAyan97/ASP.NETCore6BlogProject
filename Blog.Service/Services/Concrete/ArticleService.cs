@@ -33,6 +33,30 @@ namespace Blog.Service.Services.Concrete
             _imageHelper = imageHelper;
         }
 
+        public async Task<ArticleListVM> GetAllByPagingAsync(Guid? categoryId, int currentPage = 1, int pageSize = 3, bool isAscending = false)
+        {
+            pageSize = pageSize > 20 ? 20 : pageSize;
+
+            var articles = categoryId == null
+                ? await unitOfWork.GetRepository<Article>().GetAllAsync(a => !a.IsDeleted, a => a.Category, i => i.Image)
+                : await unitOfWork.GetRepository<Article>().GetAllAsync(a => a.CategoryId == categoryId && !a.IsDeleted, x => x.Category, i => i.Image);
+
+            var sortedArticles = isAscending
+                ? articles.OrderBy(a => a.CreatedDate).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList()
+                : articles.OrderByDescending(a => a.CreatedDate).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+
+            return new ArticleListVM
+            {
+                Articles = sortedArticles,
+                CategoryId = categoryId == null ? null : categoryId.Value,
+                CurrentPage = currentPage,
+                PageSize = pageSize,
+                TotalCount = articles.Count,
+                IsAscending = isAscending
+            };
+
+        }
+
         public async Task CreateArticleAsync(ArticleAddVM articleAddVM)
         {
             var userId = _user.GetLoggedInUserId();
@@ -131,5 +155,28 @@ namespace Blog.Service.Services.Concrete
 
             return article.Title;
         }
+
+        public async Task<ArticleListVM> SearchAsync(string keyword, int currentPage = 1, int pageSize = 3, bool isAscending = false)
+        {
+            pageSize = pageSize > 20 ? 20 : pageSize;
+            
+            var articles = await unitOfWork.GetRepository<Article>().GetAllAsync(
+                a => !a.IsDeleted && (a.Title.Contains(keyword) || a.Content.Contains(keyword) || a.Category.Name.Contains(keyword)),
+            a => a.Category, i => i.Image, u => u.User);
+
+            var sortedArticles = isAscending
+                ? articles.OrderBy(a => a.CreatedDate).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList()
+                : articles.OrderByDescending(a => a.CreatedDate).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+            
+            return new ArticleListVM
+            {
+                Articles = sortedArticles,
+                CurrentPage = currentPage,
+                PageSize = pageSize,
+                TotalCount = articles.Count,
+                IsAscending = isAscending
+            };
+        }
+
     }
 }

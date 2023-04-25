@@ -22,7 +22,7 @@
                                             <li><i class="fa-solid fa-eye"></i> @item.ViewCount</li>
                                         </ul>
                                         <p>
-                                            @(item.Content.Length > 280 ? item.Content.Substring(0,280) : item.Content) ...
+                                            @(item.Content.Length > 280 ? item.Content.Substring(0, 280) : item.Content) ...
                                         </p>
                                         <div class="post-options">
                                             <div class="row">
@@ -46,7 +46,7 @@
                         </div>
                         <div class="col-lg-12">
                             @*<div class="main-button">
-                                    <a href="blog.html">View All Posts</a>
+                                <a href="blog.html">View All Posts</a>
                                 </div>*@
 
                             <ul class="pagination justify-content-center mb-4 mt-4 btn-block">
@@ -82,8 +82,8 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="sidebar-item search">
-                                <form id="search_form" name="gs" method="GET" action="#">
-                                    <input type="text" name="q" class="searchText" placeholder="type to search..." autocomplete="on">
+                                <form id="search_form" asp-controller="Home" asp-action="Search" method="GET">
+                                    <input type="text" name="keyword" class="searchText" placeholder="Arama yapınız..." autocomplete="on">
                                 </form>
                             </div>
                         </div>
@@ -119,18 +119,9 @@
                         <div class="col-lg-12">
                             <div class="sidebar-item categories">
                                 <div class="sidebar-heading">
-                                    <h2>Categories</h2>
+                                    <h2>KATEGORİLER</h2>
                                 </div>
-                                <div class="content">
-                                    <ul>
-                                        <li><a href="#">- Nature Lifestyle</a></li>
-                                        <li><a href="#">- Awesome Layouts</a></li>
-                                        <li><a href="#">- Creative Ideas</a></li>
-                                        <li><a href="#">- Responsive Templates</a></li>
-                                        <li><a href="#">- HTML5 / CSS3 Templates</a></li>
-                                        <li><a href="#">- Creative &amp; Unique</a></li>
-                                    </ul>
-                                </div>
+                                @await Component.InvokeAsync("HomeCategories")
                             </div>
                         </div>
                     </div>
