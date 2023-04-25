@@ -12,6 +12,7 @@ namespace Blog.Service.Services.Abstracts
     public interface ICategoryService
     {
         Task<List<CategoryVM>> GetAllCategoriesNonDeleted();
+        Task<List<CategoryVM>> GetAllCategoriesNonDeletedTake24();
         Task<List<CategoryVM>> GetAllCategoriesDeleted();
         Task CreateCategoryAsync(CategoryAddVM categoryAddVM);
         Task<Category> GetCategoryByGuid(Guid id);
