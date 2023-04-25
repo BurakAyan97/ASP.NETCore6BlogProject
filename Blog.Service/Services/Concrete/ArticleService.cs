@@ -38,8 +38,8 @@ namespace Blog.Service.Services.Concrete
             pageSize = pageSize > 20 ? 20 : pageSize;
 
             var articles = categoryId == null
-                ? await unitOfWork.GetRepository<Article>().GetAllAsync(a => !a.IsDeleted, a => a.Category, i => i.Image)
-                : await unitOfWork.GetRepository<Article>().GetAllAsync(a => a.CategoryId == categoryId && !a.IsDeleted, x => x.Category, i => i.Image);
+                ? await unitOfWork.GetRepository<Article>().GetAllAsync(a => !a.IsDeleted, a => a.Category, i => i.Image,u=>u.User)
+                : await unitOfWork.GetRepository<Article>().GetAllAsync(a => a.CategoryId == categoryId && !a.IsDeleted, x => x.Category, i => i.Image, u => u.User);
 
             var sortedArticles = isAscending
                 ? articles.OrderBy(a => a.CreatedDate).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList()
@@ -84,7 +84,7 @@ namespace Blog.Service.Services.Concrete
 
         public async Task<ArticleVM> GetArticleWithCategoryNonDeletedAsync(Guid articleId)
         {
-            var article = await unitOfWork.GetRepository<Article>().GetAsync(x => !x.IsDeleted && x.Id == articleId, x => x.Category, i => i.Image);
+            var article = await unitOfWork.GetRepository<Article>().GetAsync(x => !x.IsDeleted && x.Id == articleId, x => x.Category, i => i.Image,u=>u.User);
             var map = mapper.Map<ArticleVM>(article);
             return map;
         }
