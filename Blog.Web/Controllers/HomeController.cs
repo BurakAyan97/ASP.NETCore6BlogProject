@@ -1,4 +1,5 @@
 ﻿using Blog.Data.UnitOfWorks;
+using Blog.Entity.Entities;
 using Blog.Service.Services.Abstracts;
 using Blog.Web.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -48,9 +49,27 @@ namespace Blog.Web.Controllers
 
         public async Task<IActionResult> Detail(Guid id)
         {
-            var article = await articleService.GetArticleWithCategoryNonDeletedAsync(id);
+            var ipAddress = httpContextAccessor.HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
+            var articeVisitors = await unitOfWork.GetRepository<ArticleVisitor>().GetAllAsync(null, x => x.Visitor, y => y.Article);
+            var article = await unitOfWork.GetRepository<Article>().GetAsync(x => x.Id == id);
 
-            return View(article);
+            var result = await articleService.GetArticleWithCategoryNonDeletedAsync(id);
+
+            var visitor = await unitOfWork.GetRepository<Visitor>().GetAsync(x => x.IpAddress == ipAddress);
+
+            var addArticleVisitors = new ArticleVisitor(article.Id, visitor.Id);
+
+            if (articeVisitors.Any(x => x.VisitorId == addArticleVisitors.VisitorId && x.ArticleId == addArticleVisitors.ArticleId))
+                return View(result);
+            else
+            {
+                await unitOfWork.GetRepository<ArticleVisitor>().AddAsync(addArticleVisitors);
+                article.ViewCount += 1;
+                await unitOfWork.GetRepository<Article>().UpdateAsync(article);
+                await unitOfWork.SaveAsync();
+            }
+
+            return View(result);
         }
     }
 }
